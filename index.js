@@ -4,14 +4,14 @@ const Transaction = require('ethereumjs-tx')
 const HDKey = require('hdkey')
 const TrezorConnect = require('trezor-connect').default
 
-const hdPathString = `m/44'/60'/0'/0`
+const hdPathString = `m/44'/5718350'/0'/0`
 const keyringType = 'Trezor Hardware'
 const pathBase = 'm'
 const MAX_INDEX = 1000
 const DELAY_BETWEEN_POPUPS = 1000
 const TREZOR_CONNECT_MANIFEST = {
-  email: 'support@metamask.io',
-  appUrl: 'https://metamask.io',
+  email: 'techsupport@wanchain.org',
+  appUrl: 'https://wanmask.io',
 }
 
 class TrezorKeyring extends EventEmitter {
@@ -51,6 +51,10 @@ class TrezorKeyring extends EventEmitter {
     return Boolean(this.hdk && this.hdk.publicKey)
   }
 
+  setHdPath(newHdPath) {
+    this.hdPath = newHdPath
+  }
+
   unlock () {
     if (this.isUnlocked()) {
       return Promise.resolve('already unlocked')
@@ -58,7 +62,7 @@ class TrezorKeyring extends EventEmitter {
     return new Promise((resolve, reject) => {
       TrezorConnect.getPublicKey({
         path: this.hdPath,
-        coin: 'ETH',
+        coin: 'WAN',
       }).then((response) => {
         if (response.success) {
           this.hdk.publicKey = Buffer.from(response.payload.publicKey, 'hex')
