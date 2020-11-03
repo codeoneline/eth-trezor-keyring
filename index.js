@@ -1,6 +1,6 @@
 const { EventEmitter } = require('events')
-const ethUtil = require('ethereumjs-util')
-const Transaction = require('ethereumjs-tx')
+const ethUtil = require('wanchainjs-util')
+const Transaction = require('wanchainjs-tx')
 const HDKey = require('hdkey')
 const TrezorConnect = require('trezor-connect').default
 
@@ -178,6 +178,7 @@ class TrezorKeyring extends EventEmitter {
                 nonce: this._normalize(tx.nonce),
                 gasLimit: this._normalize(tx.gasLimit),
                 gasPrice: this._normalize(tx.gasPrice),
+                txType: 0x01
               },
             }).then((response) => {
               if (response.success) {

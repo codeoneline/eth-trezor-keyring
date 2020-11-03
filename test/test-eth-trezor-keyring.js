@@ -5,7 +5,8 @@ global.self = require('./self.shim')
 const assert = require('assert').strict
 const chai = require('chai')
 const spies = require('chai-spies')
-const EthereumTx = require('ethereumjs-tx')
+const EthereumTx = require('wanchainjs-tx')
+const wanUtil = require('wanchainjs-util')
 const HDKey = require('hdkey')
 const TrezorConnect = require('trezor-connect').default
 
@@ -42,6 +43,7 @@ const fakeTx = new EthereumTx({
   data: '0x7f7465737432000000000000000000000000000000000000000000000000000000600057',
   // EIP 155 chainId - mainnet: 1, ropsten: 3
   chainId: 1,
+  Txtype: 0x01,
 })
 
 chai.use(spies)
@@ -85,7 +87,7 @@ describe('TrezorKeyring', function () {
       keyring.serialize()
         .then((output) => {
           assert.equal(output.page, 0)
-          assert.equal(output.hdPath, `m/44'/60'/0'/0`)
+          assert.equal(output.hdPath, `m/44'/5718350'/0'/0`)
           assert.equal(Array.isArray(output.accounts), true)
           assert.equal(output.accounts.length, 0)
           done()
@@ -174,9 +176,9 @@ describe('TrezorKeyring', function () {
         keyring.setAccountToUnlock(0)
         keyring.addAccounts(3)
           .then((accounts) => {
-            assert.equal(accounts[0], fakeAccounts[0])
-            assert.equal(accounts[1], fakeAccounts[1])
-            assert.equal(accounts[2], fakeAccounts[2])
+            assert.equal(accounts[0], wanUtil.toChecksumAddress(fakeAccounts[0]))
+            assert.equal(accounts[1], wanUtil.toChecksumAddress(fakeAccounts[1]))
+            assert.equal(accounts[2], wanUtil.toChecksumAddress(fakeAccounts[2]))
             done()
           })
       })
@@ -298,7 +300,7 @@ describe('TrezorKeyring', function () {
 
     it('returns the expected', function () {
       const expectedAccount = fakeAccounts[accountIndex]
-      assert.equal(accounts[0], expectedAccount)
+      assert.equal(accounts[0], wanUtil.toChecksumAddress(expectedAccount))
     })
   })
 
