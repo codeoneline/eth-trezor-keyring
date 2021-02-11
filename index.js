@@ -47,10 +47,6 @@ class TrezorKeyring extends EventEmitter {
     return Promise.resolve()
   }
 
-  setHdPath(hdPath) {
-    this.hdPath = hdPath
-  }
-
   isUnlocked () {
     return Boolean(this.hdk && this.hdk.publicKey)
   }
